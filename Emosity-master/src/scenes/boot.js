@@ -70,16 +70,16 @@ export default class Boot extends Phaser.Scene {
 
         this.load.spritesheet('enemies', 'src/assets/enemy.png', { frameWidth: 27, frameHeight: 30, startFrame: 0, endFrame: 1 });
 
-        this.load.audio('black', ['src/assets/LateAtNight.mp3']);
-        this.load.audio('red', ['src/assets/ElevatorMusic.mp3']);
-        this.load.audio('yellow', ['src/assets/ForestWalk.mp3']);
-        this.load.audio('blue', ['src/assets/marimbamagic.mp3']);
-        // this.load.audio('mixedblueteal', ['src/assets/LateAtNight.mp3']);
-        this.load.audio('mixedbluepink', ['src/assets/MelodyOfNature.mp3']);
-        this.load.audio('broken', ['src/assets/Clown.mp3']);
-        // this.load.audio('orange', ['src/assets/GoodFellow.mp3']);
-        // this.load.audio('green', ['src/assets/GoodFellow.mp3']);
-        this.load.audio('mixedtealpurple', ['src/assets/happyBirthday.mp3']);
+        this.load.audio('blackMusic', ['src/assets/LateAtNight.mp3']);
+        this.load.audio('redMusic', ['src/assets/ElevatorMusic.mp3']);
+        this.load.audio('yellowMusic', ['src/assets/ForestWalk.mp3']);
+        this.load.audio('blueMusic', ['src/assets/marimbamagic.mp3']);
+        this.load.audio('mixedbluetealMusic', ['src/assets/LateAtNight.mp3']);
+        this.load.audio('mixedbluepinkMusic', ['src/assets/MelodyOfNature.mp3']);
+        this.load.audio('brokenMusic', ['src/assets/Clown.mp3']);
+        this.load.audio('orangeMusic', ['src/assets/GoodFellow.mp3']);
+        this.load.audio('greenMusic', ['src/assets/GoodFellow.mp3']);
+        this.load.audio('mixedtealpurpleMusic', ['src/assets/happyBirthday.mp3']);
 
     }
       

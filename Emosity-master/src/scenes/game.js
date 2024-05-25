@@ -30,8 +30,6 @@ var decor;
 var records;
 var recordGroup;
 var collected; 
-var musicNotes;
-var deathParticles;
 var respawnButton;
 
 var enemies;
@@ -49,7 +47,17 @@ export default class Game extends Phaser.Scene {
 
     preload ()
     {
-        
+        // this.sound.unlock();
+        // this.load.audio('black', ['src/assets/LateAtNight.mp3']);
+        // this.load.audio('red', ['src/assets/ElevatorMusic.mp3']);
+        // this.load.audio('yellow', ['src/assets/ForestWalk.mp3']);
+        // this.load.audio('blue', ['src/assets/marimbamagic.mp3']);
+        // this.load.audio('mixedblueteal', ['src/assets/LateAtNight.mp3']);
+        // this.load.audio('mixedbluepink', ['src/assets/MelodyOfNature.mp3']);
+        // this.load.audio('broken', ['src/assets/Clown.mp3']);
+        // this.load.audio('orange', ['src/assets/GoodFellow.mp3']);
+        // this.load.audio('green', ['src/assets/GoodFellow.mp3']);
+        // this.load.audio('mixedtealpurple', ['src/assets/happyBirthday.mp3']);
     }
       
     create ()
@@ -84,43 +92,43 @@ export default class Game extends Phaser.Scene {
         recordGroup = this.physics.add.staticGroup(); 
         records = map.createFromObjects('records', { key: 'records' }); 
         records.forEach(object => {
-            if(object.getData(0).value == 'black')
+            if(object.getData('vinyl') == 'black')
             {
                 object.setTexture('records', 0);
             }
-            else if(object.getData(0).value == 'red')
+            else if(object.getData('vinyl') == 'red')
             {
                 object.setTexture('records', 1);
             }
-            else if(object.getData(0).value == 'yellow')
+            else if(object.getData('vinyl') == 'yellow')
             {
                 object.setTexture('records', 2);
             }
-            else if(object.getData(0).value == 'blue')
+            else if(object.getData('vinyl') == 'blue')
             {
                 object.setTexture('records', 3);
             }
-            else if(object.getData(0).value == 'mixedblueteal')
+            else if(object.getData('vinyl') == 'mixedblueteal')
             {
                 object.setTexture('records', 4);
             }
-            else if(object.getData(0).value == 'mixedbluepink')
+            else if(object.getData('vinyl') == 'mixedbluepink')
             {
                 object.setTexture('records', 5);
             }
-            else if(object.getData(0).value == 'mixedtealpurple')
+            else if(object.getData('vinyl') == 'mixedtealpurple')
             {
                 object.setTexture('records', 6);
             }
-            else if(object.getData(0).value == 'green')
+            else if(object.getData('vinyl') == 'green')
             {
                 object.setTexture('records', 7);
             }
-            else if(object.getData(0).value == 'orange')
+            else if(object.getData('vinyl') == 'orange')
             {
                 object.setTexture('records', 8);
             }
-            else if(object.getData(0).value == 'broken')
+            else if(object.getData('vinyl') == 'broken')
             {
                 object.setTexture('records', 9);
             }
@@ -130,29 +138,29 @@ export default class Game extends Phaser.Scene {
 
         decor = map.createFromObjects('decor', { key: 'decor' });
         decor.forEach(object => {
-            if(object.getData(0).name == 'grass')
+            if(object.getData('grass'))
             {
-                if(object.getData(0).value == 'tall')
+                if(object.getData('grass') == 'tall')
                 {
                     object.setTexture('decor', 0);
                 }
-                else if(object.getData(0).value == 'short')
+                else if(object.getData('grass') == 'short')
                 {
                     object.setTexture('decor', 1);
                 }
             }
 
-            else if(object.getData(0).name == 'flower')
+            else if(object.getData('flower'))
             {
-                if(object.getData(0).value == 'blue')
+                if(object.getData('flower') == 'blue')
                 {
                     object.setTexture('decor', 2);
                 }
-                else if(object.getData(0).value == 'pink')
+                else if(object.getData('flower') == 'pink')
                 {
                     object.setTexture('decor', 3);
                 }
-                else if(object.getData(0).value == 'yellow')
+                else if(object.getData('flower') == 'yellow')
                 {
                     object.setTexture('decor', 4);
                 }
@@ -224,9 +232,6 @@ export default class Game extends Phaser.Scene {
                 inventoryFlag = false;
             }
         }, this);
-
-        musicNotes = this.add.particles('musicNotes');
-        deathParticles = this.add.particles('deathParticles');
         
     }
 
@@ -241,7 +246,7 @@ export default class Game extends Phaser.Scene {
 
     collectRecord(player, record) 
     {
-        musicNotes.createEmitter({
+        const musicParticles = this.add.particles(record.x, record.y, 'musicNotes', {
             frame: { frames: [ 'red', 'orange', 'yellow', 'green', 'blue', 'purple' ], cycle: true },
             x: 0,
             y: 0,
@@ -253,8 +258,6 @@ export default class Game extends Phaser.Scene {
             maxParticles: 30
         });
 
-        musicNotes.setPosition(record.x, record.y);
-
         //Add record to collected group, remove from record group
         collected.add(record);
         recordGroup.remove(record);
@@ -263,7 +266,6 @@ export default class Game extends Phaser.Scene {
         record.setActive(false).setVisible(false).setScrollFactor(0, 0).setScale(2).setDepth(1);
     
         //Record sounds
-        // var blue;
         var vinylMusic;
 
         //Add play button for the record
@@ -271,8 +273,8 @@ export default class Game extends Phaser.Scene {
         //Add buttons to button group, set data for vinyl and playing state
         buttons.add(button);
         button.setDataEnabled();
-        button.data.set('vinyl', record.getData(0).value);
-        button.data.set('playing', false);
+        button.setData('vinyl', record.getData('vinyl'));
+        button.setData('playing', false);
 
         //Button press logic
         button.on('pointerdown', function () {
@@ -286,52 +288,52 @@ export default class Game extends Phaser.Scene {
                 button.setData('playing', true);
                 if(button.getData('vinyl') == 'black')
                 {
-                    vinylMusic = this.sound.add('black', { loop: false });
+                    vinylMusic = this.sound.add('blackMusic', { loop: true });
                     vinylMusic.play();
                 }
                 else if(button.getData('vinyl') == 'red')
                 {
-                    vinylMusic = this.sound.add('red', { loop: false });
+                    vinylMusic = this.sound.add('redMusic', { loop: true });
                     vinylMusic.play();
                 }
                 else if(button.getData('vinyl') == 'yellow')
                 {
-                    vinylMusic = this.sound.add('yellow', { loop: false });
+                    vinylMusic = this.sound.add('yellowMusic', { loop: true });
                     vinylMusic.play();
                 }
                 else if(button.getData('vinyl') == 'blue')
                 {
-                   vinylMusic = this.sound.add('blue', { loop: false });
+                   vinylMusic = this.sound.add('blueMusic', { loop: true });
                    vinylMusic.play();
                 }
-                // else if(button.getData('vinyl') == 'mixedblueteal')
-                // {
-                //    vinylMusic = this.sound.add('mixedblueteal', { loop: false });
-                //    vinylMusic.play();
-                // }
+                else if(button.getData('vinyl') == 'mixedblueteal')
+                {
+                   vinylMusic = this.sound.add('mixedbluetealMusic', { loop: true });
+                   vinylMusic.play();
+                }
                 else if(button.getData('vinyl') == 'mixedbluepink')
                 {
-                   vinylMusic = this.sound.add('mixedbluepink', { loop: false });
+                   vinylMusic = this.sound.add('mixedbluepinkMusic', { loop: true });
                    vinylMusic.play();
                 }
                 else if(button.getData('vinyl') == 'broken')
                 {
-                   vinylMusic = this.sound.add('broken', { loop: false });
+                   vinylMusic = this.sound.add('brokenMusic', { loop: true });
                    vinylMusic.play();
                 }
-                // else if(button.getData('vinyl') == 'orange')
-                // {
-                //    vinylMusic = this.sound.add('orange', { loop: false });
-                //    vinylMusic.play();
-                // }
-                // else if(button.getData('vinyl') == 'green')
-                // {
-                //    vinylMusic = this.sound.add('green', { loop: false });
-                //    vinylMusic.play();
-                // }
+                else if(button.getData('vinyl') == 'orange')
+                {
+                   vinylMusic = this.sound.add('orangeMusic', { loop: true });
+                   vinylMusic.play();
+                }
+                else if(button.getData('vinyl') == 'green')
+                {
+                   vinylMusic = this.sound.add('greenMusic', { loop: true });
+                   vinylMusic.play();
+                }
                 else if(button.getData('vinyl') == 'mixedtealpurple')
                 {
-                   vinylMusic = this.sound.add('mixedtealpurple', { loop: false });
+                   vinylMusic = this.sound.add('mixedtealpurpleMusic', { loop: true });
                    vinylMusic.play();
                 }
             }
@@ -376,7 +378,7 @@ export default class Game extends Phaser.Scene {
 
     playerDeath(player, enemy)
     {
-        deathParticles.createEmitter({
+        const deathParticles = this.add.particles(player.x, player.y, 'deathParticles', {
             frame: { frames: [ 'skull', 'black' ], cycle: true },
             x: 0,
             y: 0,
@@ -391,7 +393,6 @@ export default class Game extends Phaser.Scene {
         this.cameras.main.stopFollow();
         player.setVisible(false).setActive(false);
         player.body.setVelocity(0);
-        deathParticles.setPosition(player.x, player.y);
         player.setPosition(playerX, playerY);
 
         this.time.addEvent({
